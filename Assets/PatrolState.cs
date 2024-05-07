@@ -9,7 +9,6 @@ public class PatrolState : StateMachineBehaviour
     float rotationSpeed = 5f;
     public GameObject gameObject;
 
-
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -19,8 +18,27 @@ public class PatrolState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+        animator.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
     }
+
+    bool SeeEnemy(Animator animator)
+    {
+        bool result = false;
+        RaycastHit hit;
+        float viewDistance = 12;
+
+        if (Physics.Raycast(animator.transform.position, animator.transform.forward, out hit, viewDistance))
+        {
+            if (hit.transform.tag == "Player")
+            {
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
+}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -39,4 +57,4 @@ public class PatrolState : StateMachineBehaviour
     //{
     //    // Implement code that sets up animation IK (inverse kinematics)
     //}
-}
+
